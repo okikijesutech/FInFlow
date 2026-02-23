@@ -5,6 +5,7 @@ export const useDashboardData = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     // Simulate API fetch
@@ -74,5 +75,35 @@ export const useDashboardData = () => {
     fetchData();
   }, []);
 
-  return { stats, transactions, isLoading };
+  const addTransaction = (newTransaction: Transaction) => {
+    setTransactions(prev => [newTransaction, ...prev]);
+    
+    // Update stats based on the new transaction
+    if (stats) {
+      setStats({
+        ...stats,
+        totalBalance: stats.totalBalance + newTransaction.amount,
+        monthlySpending: newTransaction.type === 'expense' 
+          ? stats.monthlySpending + Math.abs(newTransaction.amount) 
+          : stats.monthlySpending,
+        monthlyRevenue: newTransaction.type === 'income'
+          ? stats.monthlyRevenue + newTransaction.amount
+          : stats.monthlyRevenue,
+      });
+    }
+  };
+
+  const filteredTransactions = transactions.filter(t => 
+    t.merchant.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return { 
+    stats, 
+    transactions: filteredTransactions, 
+    isLoading, 
+    addTransaction,
+    searchQuery,
+    setSearchQuery
+  };
 };

@@ -36,9 +36,32 @@ const NavItem = ({ icon: Icon, label, isActive, onClick }: NavItemProps) => (
   </button>
 );
 
-export const MainLayout = ({ children }: { children: React.ReactNode }) => {
+interface MainLayoutProps {
+  children: React.ReactNode;
+  searchQuery?: string;
+  setSearchQuery?: (query: string) => void;
+  activeItem?: string;
+  setActiveItem?: (item: string) => void;
+}
+
+export const MainLayout = ({ 
+  children, 
+  searchQuery, 
+  setSearchQuery,
+  activeItem = 'Dashboard',
+  setActiveItem
+}: MainLayoutProps) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('Dashboard');
+  const [internalActiveItem, setInternalActiveItem] = useState('Dashboard');
+
+  const currentActiveItem = setActiveItem ? activeItem : internalActiveItem;
+  const handleItemClick = (name: string) => {
+    if (setActiveItem) {
+      setActiveItem(name);
+    } else {
+      setInternalActiveItem(name);
+    }
+  };
 
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard' },
@@ -66,14 +89,19 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 key={item.label}
                 icon={item.icon}
                 label={item.label}
-                isActive={activeItem === item.label}
-                onClick={() => setActiveItem(item.label)}
+                isActive={currentActiveItem === item.label}
+                onClick={() => handleItemClick(item.label)}
               />
             ))}
           </nav>
 
           <div className="mt-auto space-y-4">
-            <NavItem icon={User} label="My Profile" />
+            <NavItem 
+              icon={User} 
+              label="Profile" 
+              isActive={currentActiveItem === 'Profile'}
+              onClick={() => handleItemClick('Profile')}
+            />
             <NavItem icon={LogOut} label="Sign Out" />
           </div>
         </div>
@@ -110,9 +138,9 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 key={item.label}
                 icon={item.icon}
                 label={item.label}
-                isActive={activeItem === item.label}
+                isActive={currentActiveItem === item.label}
                 onClick={() => {
-                  setActiveItem(item.label);
+                  handleItemClick(item.label);
                   setSidebarOpen(false);
                 }}
               />
@@ -135,7 +163,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="hidden items-center gap-2 text-sm text-slate-400 md:flex">
               <span>Pages</span>
               <span>/</span>
-              <span className="text-slate-200">{activeItem}</span>
+              <span className="text-slate-200">{currentActiveItem}</span>
             </div>
           </div>
 
@@ -144,7 +172,9 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
               <input 
                 type="text" 
-                placeholder="Search..." 
+                placeholder="Search transactions..." 
+                value={searchQuery || ''}
+                onChange={(e) => setSearchQuery?.(e.target.value)}
                 className="h-10 w-64 rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
               />
             </div>
