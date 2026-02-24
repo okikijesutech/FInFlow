@@ -7,6 +7,21 @@ import { cn } from '../../utils/cn';
 export const SettingsPage = ({ initialTab = 'profile' }: { initialTab?: string }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
 
+  const [notifications, setNotifications] = useState([
+    { id: 'security', title: 'Security Alerts', desc: 'Critical changes to your account or login attempts', checked: true },
+    { id: 'reports', title: 'Transaction Reports', desc: 'Weekly summary of your spending and revenue', checked: true },
+    { id: 'budget', title: 'Budget Reminders', desc: 'Notifications when you reach 80% of your set limits', checked: false },
+    { id: 'newsletter', title: 'Financial insights and platform updates', checked: false }
+  ]);
+
+  const [autoSync, setAutoSync] = useState(true);
+
+  const toggleNotification = (id: string) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, checked: !n.checked } : n
+    ));
+  };
+
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'security', label: 'Security', icon: Shield },
@@ -159,23 +174,21 @@ export const SettingsPage = ({ initialTab = 'profile' }: { initialTab?: string }
                   <CardDescription>Control how and when you receive updates from FinFlow.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {[
-                    { title: 'Security Alerts', desc: 'Critical changes to your account or login attempts', checked: true },
-                    { title: 'Transaction Reports', desc: 'Weekly summary of your spending and revenue', checked: true },
-                    { title: 'Budget Reminders', desc: 'Notifications when you reach 80% of your set limits', checked: false },
-                    { title: 'Newsletter', desc: 'Financial insights and platform updates', checked: false }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-white/5 bg-slate-900/30">
+                  {notifications.map((item) => (
+                    <div key={item.id} className="flex items-center justify-between p-4 rounded-xl border border-white/5 bg-slate-900/30">
                       <div>
                         <p className="font-medium text-white">{item.title}</p>
                         <p className="text-sm text-slate-400">{item.desc}</p>
                       </div>
-                      <div className={cn(
-                        "h-6 w-11 rounded-full p-1 transition-colors cursor-pointer",
-                        item.checked ? "bg-indigo-600" : "bg-slate-700"
-                      )}>
+                      <div 
+                        onClick={() => toggleNotification(item.id)}
+                        className={cn(
+                          "h-6 w-11 rounded-full p-1 transition-colors cursor-pointer",
+                          item.checked ? "bg-indigo-600" : "bg-slate-700"
+                        )}
+                      >
                         <div className={cn(
-                          "h-4 w-4 rounded-full bg-white transition-transform",
+                          "h-4 w-4 rounded-full bg-white transition-transform duration-200",
                           item.checked ? "translate-x-5" : "translate-x-0"
                         )} />
                       </div>
@@ -221,8 +234,17 @@ export const SettingsPage = ({ initialTab = 'profile' }: { initialTab?: string }
                         <p className="text-sm text-slate-400">Keep data synchronized across multiple browser instances</p>
                       </div>
                     </div>
-                    <div className="h-6 w-11 rounded-full bg-indigo-600 p-1 flex items-center justify-end">
-                      <div className="h-4 w-4 rounded-full bg-white" />
+                    <div 
+                      onClick={() => setAutoSync(!autoSync)}
+                      className={cn(
+                        "h-6 w-11 rounded-full p-1 transition-colors cursor-pointer",
+                        autoSync ? "bg-indigo-600" : "bg-slate-700"
+                      )}
+                    >
+                      <div className={cn(
+                        "h-4 w-4 rounded-full bg-white transition-transform duration-200",
+                        autoSync ? "translate-x-5" : "translate-x-0"
+                      )} />
                     </div>
                   </div>
                 </CardContent>
