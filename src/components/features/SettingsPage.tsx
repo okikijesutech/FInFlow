@@ -4,8 +4,8 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../ui
 import { Button } from '../ui/Button';
 import { cn } from '../../utils/cn';
 
-export const SettingsPage = () => {
-  const [activeTab, setActiveTab] = useState('profile');
+export const SettingsPage = ({ initialTab = 'profile' }: { initialTab?: string }) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
@@ -151,15 +151,83 @@ export const SettingsPage = () => {
             </div>
           )}
 
-          {/* Placeholders for other tabs */}
-          {(activeTab === 'notifications' || activeTab === 'preferences') && (
-            <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col items-center justify-center py-20 text-center">
-              <Globe className="h-12 w-12 text-slate-600 mb-4" />
-              <h3 className="text-lg font-medium text-white">Component Pending</h3>
-              <p className="text-slate-400 max-w-sm mt-2">
-                This section of the settings is still under development for Phase 3.
-              </p>
-            </Card>
+          {activeTab === 'notifications' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Notification Preferences</CardTitle>
+                  <CardDescription>Control how and when you receive updates from FinFlow.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {[
+                    { title: 'Security Alerts', desc: 'Critical changes to your account or login attempts', checked: true },
+                    { title: 'Transaction Reports', desc: 'Weekly summary of your spending and revenue', checked: true },
+                    { title: 'Budget Reminders', desc: 'Notifications when you reach 80% of your set limits', checked: false },
+                    { title: 'Newsletter', desc: 'Financial insights and platform updates', checked: false }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl border border-white/5 bg-slate-900/30">
+                      <div>
+                        <p className="font-medium text-white">{item.title}</p>
+                        <p className="text-sm text-slate-400">{item.desc}</p>
+                      </div>
+                      <div className={cn(
+                        "h-6 w-11 rounded-full p-1 transition-colors cursor-pointer",
+                        item.checked ? "bg-indigo-600" : "bg-slate-700"
+                      )}>
+                        <div className={cn(
+                          "h-4 w-4 rounded-full bg-white transition-transform",
+                          item.checked ? "translate-x-5" : "translate-x-0"
+                        )} />
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {activeTab === 'preferences' && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <Card>
+                <CardHeader>
+                  <CardTitle>System Preferences</CardTitle>
+                  <CardDescription>Customize your workspace aesthetic and data display.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-slate-300">Default Currency</label>
+                      <select className="w-full rounded-xl border border-white/10 bg-slate-900/50 p-3 text-white appearance-none focus:border-indigo-500 focus:outline-none">
+                        <option>USD ($) - US Dollar</option>
+                        <option>EUR (€) - Euro</option>
+                        <option>GBP (£) - British Pound</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-slate-300">Theme Engine</label>
+                      <select className="w-full rounded-xl border border-white/10 bg-slate-900/50 p-3 text-white appearance-none focus:border-indigo-500 focus:outline-none">
+                        <option>Glassmorphism Dark (Default)</option>
+                        <option>High Contrast</option>
+                        <option>System Neutral</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 rounded-xl border border-white/5 bg-slate-900/30">
+                    <div className="flex items-center gap-4">
+                      <Globe className="h-5 w-5 text-indigo-400" />
+                      <div>
+                        <p className="font-medium text-white">Browser Auto-Sync</p>
+                        <p className="text-sm text-slate-400">Keep data synchronized across multiple browser instances</p>
+                      </div>
+                    </div>
+                    <div className="h-6 w-11 rounded-full bg-indigo-600 p-1 flex items-center justify-end">
+                      <div className="h-4 w-4 rounded-full bg-white" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           )}
 
         </div>

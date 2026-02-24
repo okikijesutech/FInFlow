@@ -13,61 +13,72 @@ export const useDashboardData = () => {
       setIsLoading(true);
       await new Promise(resolve => setTimeout(resolve, 800)); // Simulate network delay
 
-      setStats({
-        totalBalance: 128430.00,
-        monthlyRevenue: 12340.50,
-        monthlySpending: 4210.20,
-        revenueChange: 12.5,
-        spendingChange: 8.2,
-      });
+      const savedTransactions = localStorage.getItem('finflow_transactions');
+      const savedStats = localStorage.getItem('finflow_stats');
 
-      setTransactions([
-        {
-          id: '1',
-          merchant: 'Apple Store',
-          category: 'Technology',
-          amount: -999.00,
-          date: 'Today, 2:45 PM',
-          status: 'completed',
-          type: 'expense'
-        },
-        {
-          id: '2',
-          merchant: 'Starbucks',
-          category: 'Food & Drink',
-          amount: -5.50,
-          date: 'Today, 10:20 AM',
-          status: 'completed',
-          type: 'expense'
-        },
-        {
-          id: '3',
-          merchant: 'Stripe Payout',
-          category: 'Income',
-          amount: 4500.00,
-          date: 'Yesterday, 4:15 PM',
-          status: 'completed',
-          type: 'income'
-        },
-        {
-          id: '4',
-          merchant: 'Netflix Subscription',
-          category: 'Entertainment',
-          amount: -15.99,
-          date: 'Feb 21, 2026',
-          status: 'pending',
-          type: 'expense'
-        },
-        {
-          id: '5',
-          merchant: 'Uber Technologies',
-          category: 'Transport',
-          amount: -24.50,
-          date: 'Feb 20, 2026',
-          status: 'completed',
-          type: 'expense'
-        },
-      ]);
+      if (savedStats) {
+        setStats(JSON.parse(savedStats));
+      } else {
+        setStats({
+          totalBalance: 128430.00,
+          monthlyRevenue: 12340.50,
+          monthlySpending: 4210.20,
+          revenueChange: 12.5,
+          spendingChange: 8.2,
+        });
+      }
+
+      if (savedTransactions) {
+        setTransactions(JSON.parse(savedTransactions));
+      } else {
+        setTransactions([
+          {
+            id: '1',
+            merchant: 'Apple Store',
+            category: 'Technology',
+            amount: -999.00,
+            date: 'Today, 2:45 PM',
+            status: 'completed',
+            type: 'expense'
+          },
+          {
+            id: '2',
+            merchant: 'Starbucks',
+            category: 'Food & Drink',
+            amount: -5.50,
+            date: 'Today, 10:20 AM',
+            status: 'completed',
+            type: 'expense'
+          },
+          {
+            id: '3',
+            merchant: 'Stripe Payout',
+            category: 'Income',
+            amount: 4500.00,
+            date: 'Yesterday, 4:15 PM',
+            status: 'completed',
+            type: 'income'
+          },
+          {
+            id: '4',
+            merchant: 'Netflix Subscription',
+            category: 'Entertainment',
+            amount: -15.99,
+            date: 'Feb 21, 2026',
+            status: 'pending',
+            type: 'expense'
+          },
+          {
+            id: '5',
+            merchant: 'Uber Technologies',
+            category: 'Transport',
+            amount: -24.50,
+            date: 'Feb 20, 2026',
+            status: 'completed',
+            type: 'expense'
+          },
+        ]);
+      }
 
       setIsLoading(false);
     };
@@ -76,11 +87,13 @@ export const useDashboardData = () => {
   }, []);
 
   const addTransaction = (newTransaction: Transaction) => {
-    setTransactions(prev => [newTransaction, ...prev]);
+    const updatedTransactions = [newTransaction, ...transactions];
+    setTransactions(updatedTransactions);
+    localStorage.setItem('finflow_transactions', JSON.stringify(updatedTransactions));
     
     // Update stats based on the new transaction
     if (stats) {
-      setStats({
+      const updatedStats = {
         ...stats,
         totalBalance: stats.totalBalance + newTransaction.amount,
         monthlySpending: newTransaction.type === 'expense' 
@@ -89,7 +102,9 @@ export const useDashboardData = () => {
         monthlyRevenue: newTransaction.type === 'income'
           ? stats.monthlyRevenue + newTransaction.amount
           : stats.monthlyRevenue,
-      });
+      };
+      setStats(updatedStats);
+      localStorage.setItem('finflow_stats', JSON.stringify(updatedStats));
     }
   };
 

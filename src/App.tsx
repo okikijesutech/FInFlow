@@ -15,6 +15,9 @@ import { StatsCard } from './components/features/StatsCard';
 import { RevenueChart } from './components/features/RevenueChart';
 import { RecentTransactions } from './components/features/RecentTransactions';
 import { SettingsPage } from './components/features/SettingsPage';
+import { BalancesPage } from './components/features/BalancesPage';
+import { CardsPage } from './components/features/CardsPage';
+import { TransactionsPage } from './components/features/TransactionsPage';
 import { useDashboardData } from './hooks/useDashboardData';
 import { formatCurrency } from './utils/formatters';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
@@ -182,7 +185,19 @@ function App() {
       activeItem={activePage}
       setActiveItem={setActivePage}
     >
-      {activePage === 'Dashboard' || activePage === 'Balances' || activePage === 'Transactions' || activePage === 'Cards' ? renderDashboard() : <SettingsPage />}
+      {activePage === 'Dashboard' && renderDashboard()}
+      {activePage === 'Balances' && <BalancesPage />}
+      {activePage === 'Transactions' && <TransactionsPage />}
+      {activePage === 'Cards' && <CardsPage />}
+      {activePage === 'Settings' && <SettingsPage />}
+      
+      {/* Fallback for profile access via Sidebar/Topbar */}
+      {activePage === 'Profile' && (
+        <div className="animate-in fade-in duration-500">
+           {/* We redirect profile view to settings for now, as it hosts the profile form */}
+           <SettingsPage initialTab="profile" />
+        </div>
+      )}
 
       <NewTransactionModal 
         isOpen={isModalOpen} 
