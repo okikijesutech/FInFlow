@@ -27,7 +27,7 @@ export const StatsCard = ({
   };
 
   const trendIcon = trend === 'up' ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />;
-  const trendColor = trend === 'up' ? 'text-emerald-400' : 'text-rose-400';
+  const trendColor = trend === 'up' ? 'text-emerald-500' : 'text-rose-500';
 
   return (
     <Card className="flex flex-col gap-4">
@@ -41,10 +41,10 @@ export const StatsCard = ({
         </div>
       </div>
       <div>
-        <p className="text-sm font-medium text-slate-400">{title}</p>
-        <h3 className="mt-1 text-2xl font-bold text-white tracking-tight">{value}</h3>
+        <p className="text-sm font-medium text-muted">{title}</p>
+        <h3 className="mt-1 text-2xl font-bold text-foreground tracking-tight">{value}</h3>
       </div>
-      <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-slate-800">
+      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted/20">
         <div 
           className={cn('h-full transition-all duration-1000', 
             color === 'indigo' ? 'bg-indigo-500' : 

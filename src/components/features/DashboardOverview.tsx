@@ -45,8 +45,8 @@ export const DashboardOverview = ({ stats, transactions, onNewTransaction }: Das
       {/* Header Section */}
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
-          <p className="mt-1 text-slate-400 text-lg">Good morning, {user.firstName}. Here's what's happening today.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard Overview</h1>
+          <p className="mt-1 text-muted text-lg">Good morning, {user.firstName}. Here's what's happening today.</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" className="hidden sm:inline-flex gap-2">
@@ -54,7 +54,7 @@ export const DashboardOverview = ({ stats, transactions, onNewTransaction }: Das
             Export Report
           </Button>
           <Button 
-            className="gap-2 bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/20"
+            className="gap-2 bg-primary hover:bg-primary/90 shadow-primary/20"
             onClick={onNewTransaction}
           >
             <Plus className="h-4 w-4" />

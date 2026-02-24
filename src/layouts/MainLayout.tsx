@@ -74,15 +74,15 @@ export const MainLayout = ({
   ];
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-50">
+    <div className="flex min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Sidebar - Desktop */}
-      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 border-r border-white/5 bg-slate-950/50 backdrop-blur-xl lg:block">
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-72 border-r border-card-border bg-background/50 backdrop-blur-xl lg:block">
         <div className="flex h-full flex-col p-6">
           <div className="mb-10 flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 shadow-lg shadow-indigo-600/20">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20">
               <Wallet className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white">FinFlow</span>
+            <span className="text-xl font-bold tracking-tight text-foreground">FinFlow</span>
           </div>
 
           <nav className="flex-1 space-y-2">
@@ -113,18 +113,18 @@ export const MainLayout = ({
 
       {/* Sidebar - Mobile */}
       <aside className={cn(
-        "fixed left-0 top-0 z-50 h-screen w-[280px] bg-slate-950 border-r border-white/5 p-6 transition-transform duration-300 lg:hidden",
+        "fixed left-0 top-0 z-50 h-screen w-[280px] bg-background border-r border-card-border p-6 transition-transform duration-300 lg:hidden",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex h-full flex-col">
           <div className="mb-10 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
                 <Wallet className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">FinFlow</span>
+              <span className="text-xl font-bold text-foreground">FinFlow</span>
             </div>
-            <button onClick={() => setSidebarOpen(false)} className="text-slate-400">
+            <button onClick={() => setSidebarOpen(false)} className="text-muted">
               <X className="h-6 w-6" />
             </button>
           </div>
@@ -148,46 +148,46 @@ export const MainLayout = ({
       {/* Main Content Area */}
       <div className="flex-1 lg:pl-72">
         {/* Topbar */}
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-white/5 bg-slate-950/50 px-6 backdrop-blur-xl lg:px-10">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-card-border bg-background/50 px-6 backdrop-blur-xl lg:px-10">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setSidebarOpen(true)}
-              className="rounded-lg p-2 hover:bg-white/5 lg:hidden"
+              className="rounded-lg p-2 hover:bg-card/50 lg:hidden"
             >
-              <Menu className="h-6 w-6 text-slate-400" />
+              <Menu className="h-6 w-6 text-muted" />
             </button>
-            <div className="hidden items-center gap-2 text-sm text-slate-400 md:flex">
+            <div className="hidden items-center gap-2 text-sm text-muted md:flex">
               <span>Pages</span>
               <span>/</span>
-              <span className="text-slate-200">{currentActiveItem}</span>
+              <span className="text-foreground/80">{currentActiveItem}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-4 lg:gap-6">
             <div className="relative hidden sm:block">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
               <input 
                 type="text" 
                 placeholder="Search transactions..." 
                 value={searchQuery || ''}
                 onChange={(e) => setSearchQuery?.(e.target.value)}
-                className="h-10 w-64 rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                className="h-10 w-64 rounded-xl border border-card-border bg-card/30 pl-10 pr-4 text-sm text-foreground placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
               />
             </div>
             <ThemeSwitcher />
-            <button className="relative rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-400 hover:text-white transition-all">
+            <button className="relative rounded-xl border border-card-border bg-card/30 p-2.5 text-muted hover:text-foreground transition-all">
               <Bell className="h-5 w-5" />
-              <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-slate-950" />
+              <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-background" />
             </button>
             <button 
               onClick={() => handleItemClick('Settings')}
-              className="flex items-center gap-3 pl-4 border-l border-white/10 group transition-all"
+              className="flex items-center gap-3 pl-4 border-l border-card-border group transition-all"
             >
               <div className="hidden flex-col items-end text-sm md:flex group-hover:opacity-80">
-                <span className="font-medium text-slate-100">{user.firstName} {user.lastName}</span>
-                <span className="text-xs text-slate-500">Premium Member</span>
+                <span className="font-medium text-foreground">{user.firstName} {user.lastName}</span>
+                <span className="text-xs text-muted">Premium Member</span>
               </div>
-              <div className="h-10 w-10 overflow-hidden rounded-xl border border-indigo-500/50 bg-indigo-500/10 shadow-lg shadow-indigo-500/10 group-hover:border-indigo-400 group-hover:scale-95 transition-all">
+              <div className="h-10 w-10 overflow-hidden rounded-xl border border-primary/50 bg-primary/10 shadow-lg shadow-primary/10 group-hover:border-primary group-hover:scale-95 transition-all">
                 <img 
                   src={user.avatarUrl} 
                   alt="Avatar" 

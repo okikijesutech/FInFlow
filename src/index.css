@@ -1,22 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617; /* slate-950 */
-  --foreground: #f8fafc; /* slate-50 */
-  --card: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.1);
+  --background: #ffffff;
+  --foreground: #0f172a; /* slate-900 */
+  --card: #f8fafc; /* slate-50 */
+  --card-border: #e2e8f0; /* slate-200 */
   --muted: #64748b; /* slate-500 */
+  --primary: #4f46e5; /* indigo-600 */
 }
 
-.light {
-  --background: #f8fafc; /* slate-50 */
-  --foreground: #020617; /* slate-950 */
-  --card: rgba(0, 0, 0, 0.03);
-  --card-border: rgba(0, 0, 0, 0.1);
+.dark {
+  --background: #020617; /* slate-950 */
+  --foreground: #f8fafc; /* slate-50 */
+  --card: #0f172a; /* slate-900 */
+  --card-border: #1e293b; /* slate-800 */
   --muted: #94a3b8; /* slate-400 */
+  --primary: #6366f1; /* indigo-500 */
 }
 
 @theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  
   --color-glass: var(--card);
   --color-glass-border: var(--card-border);
   --sidebar-width: 280px;

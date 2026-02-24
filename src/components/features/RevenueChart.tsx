@@ -39,17 +39,17 @@ export const RevenueChart = () => {
                 <stop offset="95%" stopColor="#ec4899" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--card-border)" />
             <XAxis 
               dataKey="name" 
-              stroke="#64748b" 
+              stroke="var(--muted)" 
               fontSize={12} 
               tickLine={false} 
               axisLine={false} 
               dy={10}
             />
             <YAxis 
-              stroke="#64748b" 
+              stroke="var(--muted)" 
               fontSize={12} 
               tickLine={false} 
               axisLine={false} 
@@ -57,12 +57,12 @@ export const RevenueChart = () => {
             />
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: 'rgba(15, 23, 42, 0.9)', 
-                borderColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'var(--card)', 
+                borderColor: 'var(--card-border)',
                 borderRadius: '12px',
-                color: '#f8fafc'
+                color: 'var(--foreground)'
               }}
-              itemStyle={{ color: '#f8fafc' }}
+              itemStyle={{ color: 'var(--foreground)' }}
             />
             <Area 
               type="monotone" 
