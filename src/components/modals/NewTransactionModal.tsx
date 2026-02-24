@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { X, DollarSign, Tag, Store } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { type Transaction } from '../../types/dashboard';
 
 interface NewTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (transaction: any) => void;
+  onSubmit: (transaction: Transaction) => void;
 }
 
 export const NewTransactionModal = ({ isOpen, onClose, onSubmit }: NewTransactionModalProps) => {

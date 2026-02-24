@@ -72,5 +72,14 @@ export const DashboardService = {
       id: `tx-${Date.now()}`,
       status: 'completed'
     };
+  },
+
+  async exportDashboardData(): Promise<boolean> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log('Exporting dashboard data to CSV...');
+        resolve(true);
+      }, 1500);
+    });
   }
 };

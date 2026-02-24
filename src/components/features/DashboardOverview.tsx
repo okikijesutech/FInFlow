@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Plus, 
@@ -6,7 +7,8 @@ import {
   TrendingUp, 
   ArrowDownRight,
   ShieldCheck,
-  Zap
+  Zap,
+  Loader2
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { StatsCard } from './StatsCard';
@@ -14,6 +16,7 @@ import { RevenueChart } from './RevenueChart';
 import { RecentTransactions } from './RecentTransactions';
 import { formatCurrency } from '../../utils/formatters';
 import { useUserStore } from '../../store/useUserStore';
+import { DashboardService } from '../../services/DashboardService';
 import type { Transaction, DashboardStats } from '../../types/dashboard';
 
 interface DashboardOverviewProps {
@@ -36,9 +39,16 @@ const item = {
   hidden: { y: 20, opacity: 0 },
   show: { y: 0, opacity: 1 }
 };
-
 export const DashboardOverview = ({ stats, transactions, onNewTransaction }: DashboardOverviewProps) => {
   const { user } = useUserStore();
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExport = async () => {
+    setIsExporting(true);
+    await DashboardService.exportDashboardData();
+    setIsExporting(false);
+    alert('Report exported successfully! (Mock)');
+  };
   
   return (
     <div className="space-y-10 animate-in fade-in duration-500">
@@ -49,9 +59,14 @@ export const DashboardOverview = ({ stats, transactions, onNewTransaction }: Das
           <p className="mt-1 text-muted text-lg">Good morning, {user.firstName}. Here's what's happening today.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="hidden sm:inline-flex gap-2">
-            <Download className="h-4 w-4" />
-            Export Report
+          <Button 
+            variant="outline" 
+            className="hidden sm:inline-flex gap-2"
+            onClick={handleExport}
+            disabled={isExporting}
+          >
+            {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {isExporting ? 'Exporting...' : 'Export Report'}
           </Button>
           <Button 
             className="gap-2 bg-primary hover:bg-primary/90 shadow-primary/20"

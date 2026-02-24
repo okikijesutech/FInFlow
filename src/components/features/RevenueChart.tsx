@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { 
   AreaChart, 
   Area, 
@@ -8,6 +9,7 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/Card';
+import { cn } from '../../utils/cn';
 
 const data = [
   { name: 'Jan', revenue: 4000, spending: 2400 },
@@ -20,11 +22,33 @@ const data = [
 ];
 
 export const RevenueChart = () => {
+  const [range, setRange] = useState('7D');
+
+  const ranges = ['7D', '30D', '1Y', 'ALL'];
+
   return (
     <Card className="col-span-1 lg:col-span-2">
-      <CardHeader>
-        <CardTitle>Revenue Flow</CardTitle>
-        <CardDescription>Monthly revenue vs spending analytics</CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <div>
+          <CardTitle>Revenue Flow</CardTitle>
+          <CardDescription>Monthly revenue vs spending analytics</CardDescription>
+        </div>
+        <div className="flex items-center gap-1 rounded-lg border border-card-border bg-card/30 p-1">
+          {ranges.map((r) => (
+            <button
+              key={r}
+              onClick={() => setRange(r)}
+              className={cn(
+                "px-3 py-1 text-xs font-semibold rounded-md transition-all",
+                range === r 
+                  ? "bg-primary text-white shadow-sm" 
+                  : "text-muted hover:text-foreground hover:bg-card/50"
+              )}
+            >
+              {r}
+            </button>
+          ))}
+        </div>
       </CardHeader>
       <CardContent className="h-[350px] w-full pt-4">
         <ResponsiveContainer width="100%" height="100%">

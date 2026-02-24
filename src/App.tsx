@@ -10,6 +10,7 @@ import { TransactionsPage } from './components/features/TransactionsPage';
 import { useDashboardData } from './hooks/useDashboardData';
 import { NewTransactionModal } from './components/modals/NewTransactionModal';
 import { useState } from 'react';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 
 function App() {
   const { 
@@ -34,32 +35,32 @@ function App() {
     );
   }
 
-  return (
-    <MainLayout 
-      searchQuery={searchQuery} 
-      setSearchQuery={setSearchQuery}
-      activeItem={activePage}
-      setActiveItem={setActivePage}
-    >
-      {activePage === 'Dashboard' && (
-        <DashboardOverview
-          stats={stats}
-          transactions={transactions}
-          onNewTransaction={() => setIsModalOpen(true)}
-        />
-      )}
-      {activePage === 'Balances' && <BalancesPage />}
-      {activePage === 'Transactions' && <TransactionsPage />}
-      {activePage === 'Cards' && <CardsPage />}
-      {activePage === 'Settings' && <SettingsPage />}
+    <ErrorBoundary>
+      <MainLayout 
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery}
+        activeItem={activePage}
+        setActiveItem={setActivePage}
+      >
+        {activePage === 'Dashboard' && (
+          <DashboardOverview
+            stats={stats}
+            transactions={transactions}
+            onNewTransaction={() => setIsModalOpen(true)}
+          />
+        )}
+        {activePage === 'Balances' && <BalancesPage />}
+        {activePage === 'Transactions' && <TransactionsPage />}
+        {activePage === 'Cards' && <CardsPage />}
+        {activePage === 'Settings' && <SettingsPage />}
 
-      <NewTransactionModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSubmit={addTransaction} 
-      />
-    </MainLayout>
-  );
+        <NewTransactionModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          onSubmit={addTransaction} 
+        />
+      </MainLayout>
+    </ErrorBoundary>
 }
 
 export default App;
