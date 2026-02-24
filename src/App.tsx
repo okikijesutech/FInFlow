@@ -34,7 +34,7 @@ function App() {
       </MainLayout>
     );
   }
-
+  return (
     <ErrorBoundary>
       <MainLayout 
         searchQuery={searchQuery} 
@@ -61,6 +61,7 @@ function App() {
         />
       </MainLayout>
     </ErrorBoundary>
+  );
 }
 
 export default App;

@@ -39,6 +39,7 @@ const item = {
   hidden: { y: 20, opacity: 0 },
   show: { y: 0, opacity: 1 }
 };
+
 export const DashboardOverview = ({ stats, transactions, onNewTransaction }: DashboardOverviewProps) => {
   const { user } = useUserStore();
   const [isExporting, setIsExporting] = useState(false);
