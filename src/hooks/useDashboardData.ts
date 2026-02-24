@@ -1,110 +1,50 @@
-import { useState, useEffect } from 'react';
-import type { DashboardStats, Transaction } from '../types/dashboard';
+import { useEffect } from 'react';
+import { useDashboardStore } from '../store/useDashboardStore';
+import { DashboardService } from '../services/DashboardService';
+import type { Transaction } from '../types/dashboard';
 
 export const useDashboardData = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const { 
+    stats, 
+    transactions, 
+    isLoading, 
+    searchQuery,
+    setSearchQuery,
+    setStats,
+    setTransactions,
+    addTransaction: addTxToStore,
+    setLoading
+  } = useDashboardStore();
 
   useEffect(() => {
-    // Simulate API fetch
-    const fetchData = async () => {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 800)); // Simulate network delay
-
-      const savedTransactions = localStorage.getItem('finflow_transactions');
-      const savedStats = localStorage.getItem('finflow_stats');
-
-      if (savedStats) {
-        setStats(JSON.parse(savedStats));
+    const loadData = async () => {
+      // Only fetch if we don't have persisted transactions
+      if (transactions.length === 0) {
+        setLoading(true);
+        try {
+          const { stats: freshStats, transactions: freshTxs } = await DashboardService.fetchDashboardData();
+          setStats(freshStats);
+          setTransactions(freshTxs);
+        } catch (error) {
+          console.error("Failed to fetch dashboard data:", error);
+        } finally {
+          setLoading(false);
+        }
       } else {
-        setStats({
-          totalBalance: 128430.00,
-          monthlyRevenue: 12340.50,
-          monthlySpending: 4210.20,
-          revenueChange: 12.5,
-          spendingChange: 8.2,
-        });
+        setLoading(false);
       }
-
-      if (savedTransactions) {
-        setTransactions(JSON.parse(savedTransactions));
-      } else {
-        setTransactions([
-          {
-            id: '1',
-            merchant: 'Apple Store',
-            category: 'Technology',
-            amount: -999.00,
-            date: 'Today, 2:45 PM',
-            status: 'completed',
-            type: 'expense'
-          },
-          {
-            id: '2',
-            merchant: 'Starbucks',
-            category: 'Food & Drink',
-            amount: -5.50,
-            date: 'Today, 10:20 AM',
-            status: 'completed',
-            type: 'expense'
-          },
-          {
-            id: '3',
-            merchant: 'Stripe Payout',
-            category: 'Income',
-            amount: 4500.00,
-            date: 'Yesterday, 4:15 PM',
-            status: 'completed',
-            type: 'income'
-          },
-          {
-            id: '4',
-            merchant: 'Netflix Subscription',
-            category: 'Entertainment',
-            amount: -15.99,
-            date: 'Feb 21, 2026',
-            status: 'pending',
-            type: 'expense'
-          },
-          {
-            id: '5',
-            merchant: 'Uber Technologies',
-            category: 'Transport',
-            amount: -24.50,
-            date: 'Feb 20, 2026',
-            status: 'completed',
-            type: 'expense'
-          },
-        ]);
-      }
-
-      setIsLoading(false);
     };
 
-    fetchData();
-  }, []);
+    loadData();
+  }, [setStats, setTransactions, setLoading, transactions.length]);
 
-  const addTransaction = (newTransaction: Transaction) => {
-    const updatedTransactions = [newTransaction, ...transactions];
-    setTransactions(updatedTransactions);
-    localStorage.setItem('finflow_transactions', JSON.stringify(updatedTransactions));
-    
-    // Update stats based on the new transaction
-    if (stats) {
-      const updatedStats = {
-        ...stats,
-        totalBalance: stats.totalBalance + newTransaction.amount,
-        monthlySpending: newTransaction.type === 'expense' 
-          ? stats.monthlySpending + Math.abs(newTransaction.amount) 
-          : stats.monthlySpending,
-        monthlyRevenue: newTransaction.type === 'income'
-          ? stats.monthlyRevenue + newTransaction.amount
-          : stats.monthlyRevenue,
-      };
-      setStats(updatedStats);
-      localStorage.setItem('finflow_stats', JSON.stringify(updatedStats));
+  const addTransaction = async (newTx: Omit<Transaction, 'id' | 'status'>) => {
+    // Professional async data flow
+    try {
+      const tx = await DashboardService.addTransaction(newTx);
+      addTxToStore(tx);
+    } catch (error) {
+      console.error("Failed to add transaction:", error);
     }
   };
 
@@ -113,10 +53,10 @@ export const useDashboardData = () => {
     t.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return { 
-    stats, 
-    transactions: filteredTransactions, 
-    isLoading, 
+  return {
+    stats,
+    transactions: filteredTransactions,
+    isLoading,
     addTransaction,
     searchQuery,
     setSearchQuery

@@ -9,10 +9,10 @@ import {
   Search, 
   Menu,
   X,
-  User,
   LogOut
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useUserStore } from '../store/useUserStore';
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -51,6 +51,7 @@ export const MainLayout = ({
   activeItem = 'Dashboard',
   setActiveItem
 }: MainLayoutProps) => {
+  const { user } = useUserStore();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [internalActiveItem, setInternalActiveItem] = useState('Dashboard');
 
@@ -95,13 +96,7 @@ export const MainLayout = ({
             ))}
           </nav>
 
-          <div className="mt-auto space-y-4">
-            <NavItem 
-              icon={User} 
-              label="Profile" 
-              isActive={currentActiveItem === 'Profile'}
-              onClick={() => handleItemClick('Profile')}
-            />
+          <div className="mt-auto">
             <NavItem icon={LogOut} label="Sign Out" />
           </div>
         </div>
@@ -182,19 +177,22 @@ export const MainLayout = ({
               <Bell className="h-5 w-5" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-slate-950" />
             </button>
-            <div className="flex items-center gap-3 pl-4 border-l border-white/10">
-              <div className="hidden flex-col items-end text-sm md:flex">
-                <span className="font-medium text-slate-100">Alex Rivers</span>
+            <button 
+              onClick={() => handleItemClick('Settings')}
+              className="flex items-center gap-3 pl-4 border-l border-white/10 group transition-all"
+            >
+              <div className="hidden flex-col items-end text-sm md:flex group-hover:opacity-80">
+                <span className="font-medium text-slate-100">{user.firstName} {user.lastName}</span>
                 <span className="text-xs text-slate-500">Premium Member</span>
               </div>
-              <div className="h-10 w-10 overflow-hidden rounded-xl border border-indigo-500/50 bg-indigo-500/10 shadow-lg shadow-indigo-500/10">
+              <div className="h-10 w-10 overflow-hidden rounded-xl border border-indigo-500/50 bg-indigo-500/10 shadow-lg shadow-indigo-500/10 group-hover:border-indigo-400 group-hover:scale-95 transition-all">
                 <img 
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" 
+                  src={user.avatarUrl} 
                   alt="Avatar" 
                   className="h-full w-full object-cover"
                 />
               </div>
-            </div>
+            </button>
           </div>
         </header>
 

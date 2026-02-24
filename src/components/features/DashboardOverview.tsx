@@ -13,6 +13,7 @@ import { StatsCard } from './StatsCard';
 import { RevenueChart } from './RevenueChart';
 import { RecentTransactions } from './RecentTransactions';
 import { formatCurrency } from '../../utils/formatters';
+import { useUserStore } from '../../store/useUserStore';
 import type { Transaction, DashboardStats } from '../../types/dashboard';
 
 interface DashboardOverviewProps {
@@ -37,13 +38,15 @@ const item = {
 };
 
 export const DashboardOverview = ({ stats, transactions, onNewTransaction }: DashboardOverviewProps) => {
+  const { user } = useUserStore();
+  
   return (
     <div className="space-y-10 animate-in fade-in duration-500">
       {/* Header Section */}
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
-          <p className="mt-1 text-slate-400 text-lg">Good morning, Alex. Here's what's happening today.</p>
+          <p className="mt-1 text-slate-400 text-lg">Good morning, {user.firstName}. Here's what's happening today.</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" className="hidden sm:inline-flex gap-2">

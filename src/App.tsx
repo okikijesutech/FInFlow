@@ -53,14 +53,6 @@ function App() {
       {activePage === 'Cards' && <CardsPage />}
       {activePage === 'Settings' && <SettingsPage />}
 
-      {/* Fallback for profile access via Sidebar/Topbar */}
-      {activePage === 'Profile' && (
-        <div className="animate-in fade-in duration-500">
-           {/* We redirect profile view to settings for now, as it hosts the profile form */}
-           <SettingsPage initialTab="profile" />
-        </div>
-      )}
-
       <NewTransactionModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
