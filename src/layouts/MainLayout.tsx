@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useUserStore } from '../store/useUserStore';
+import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -173,6 +174,7 @@ export const MainLayout = ({
                 className="h-10 w-64 rounded-xl border border-white/10 bg-white/5 pl-10 pr-4 text-sm text-slate-200 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
               />
             </div>
+            <ThemeSwitcher />
             <button className="relative rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-400 hover:text-white transition-all">
               <Bell className="h-5 w-5" />
               <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-slate-950" />

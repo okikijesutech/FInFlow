@@ -1,6 +1,7 @@
 import { Globe } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../../ui/Card';
 import { Toggle } from '../../ui/Toggle';
+import { ThemeSwitcher } from '../../ui/ThemeSwitcher';
 
 interface PreferencesTabProps {
   autoSync: boolean;
@@ -27,11 +28,9 @@ export const PreferencesTab = ({ autoSync, onToggleSync }: PreferencesTabProps) 
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">Theme Engine</label>
-              <select className="w-full rounded-xl border border-white/10 bg-slate-900/50 p-3 text-white appearance-none focus:border-indigo-500 focus:outline-none transition-all">
-                <option>Glassmorphism Dark (Default)</option>
-                <option>High Contrast</option>
-                <option>System Neutral</option>
-              </select>
+              <div className="pt-1">
+                <ThemeSwitcher />
+              </div>
             </div>
           </div>
 

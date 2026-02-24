@@ -1,14 +1,32 @@
 @import "tailwindcss";
 
+:root {
+  --background: #020617; /* slate-950 */
+  --foreground: #f8fafc; /* slate-50 */
+  --card: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --muted: #64748b; /* slate-500 */
+}
+
+.light {
+  --background: #f8fafc; /* slate-50 */
+  --foreground: #020617; /* slate-950 */
+  --card: rgba(0, 0, 0, 0.03);
+  --card-border: rgba(0, 0, 0, 0.1);
+  --muted: #94a3b8; /* slate-400 */
+}
+
 @theme {
-  --color-glass: rgba(255, 255, 255, 0.1);
-  --color-glass-border: rgba(255, 255, 255, 0.2);
+  --color-glass: var(--card);
+  --color-glass-border: var(--card-border);
   --sidebar-width: 280px;
 }
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-50 antialiased;
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased transition-colors duration-300;
     font-family: 'Inter', sans-serif;
   }
 }

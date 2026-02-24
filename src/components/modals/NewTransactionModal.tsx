@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X, DollarSign, Tag, Store } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -13,6 +13,20 @@ export const NewTransactionModal = ({ isOpen, onClose, onSubmit }: NewTransactio
   const [amount, setAmount] = useState('');
   const [merchant, setMerchant] = useState('');
   const [category, setCategory] = useState('Technology');
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleEsc);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -50,6 +64,7 @@ export const NewTransactionModal = ({ isOpen, onClose, onSubmit }: NewTransactio
             <CardTitle className="text-xl text-white">New Transaction</CardTitle>
             <button 
               onClick={onClose}
+              aria-label="Close modal"
               className="rounded-lg p-2 text-slate-400 hover:bg-white/5 hover:text-white transition-colors"
             >
               <X className="h-5 w-5" />
